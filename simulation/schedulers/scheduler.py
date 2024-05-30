@@ -42,14 +42,17 @@ def scheduler(name, node, namespace="default"):
 def main():
     watcher = watch.Watch()
     for event in watcher.stream(v1.list_namespaced_pod, "default"):
-        if event['object'].status.phase == "Pending" \
-                and event['object'].spec.scheduler_name == SCHEDULER_NAME:
+        if (
+            event["object"].status.phase == "Pending"
+            and event["object"].spec.scheduler_name == SCHEDULER_NAME
+        ):
             try:
-                scheduler(event['object'].metadata.name,
-                          random.choice(nodes_available()))
+                scheduler(
+                    event["object"].metadata.name, random.choice(nodes_available())
+                )
             except client.rest.ApiException as e:
-                print(json.loads(e.body)['message'])
+                print(json.loads(e.body)["message"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -11,5 +11,5 @@ def main():
         print(np.linalg.eig(np.random.randint(10, size=(500, 500))))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

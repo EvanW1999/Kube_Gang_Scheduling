@@ -9,6 +9,7 @@ kazoo = "*"
 configobj = "*"
 tensorflow = "*"
 gym = "*"
+gymnasium = "*"
 
 [dev-packages]
 autopep8 = "*"

@@ -14,15 +14,14 @@ def main() -> None:
     from a Redis queue.
     """
 
-    zk: KazooClient = KazooClient(hosts='10.1.69.20:2181')
+    zk: KazooClient = KazooClient(hosts="10.1.69.20:2181")
 
     zk.start()
     if zk.connected:
         print(f"{JOB_NAME} has connected to Zookeeper")
 
     zk_queue: LockingQueue = LockingQueue(zk, f"/{JOB_NAME}")
-    zk_barrier: DoubleBarrier = DoubleBarrier(
-        zk, BARRIER_PATH, NUM_TASKS + 1)
+    zk_barrier: DoubleBarrier = DoubleBarrier(zk, BARRIER_PATH, NUM_TASKS + 1)
 
     while True:
         print("Job is ready")
@@ -35,9 +34,10 @@ def main() -> None:
         zk_barrier.enter()
         print(f"Starting with workload: {workload}")
         subprocess.check_output(
-            ["stress-ng", f"--{JOB_NAME}", "0", f"--cpu-ops", str(20000 * workload)])
+            ["stress-ng", f"--{JOB_NAME}", "0", f"--cpu-ops", str(20000 * workload)]
+        )
         zk_barrier.leave()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

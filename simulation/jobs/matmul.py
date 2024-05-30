@@ -11,5 +11,5 @@ def main():
         print(np.square(np.random.randint(10, size=(5000, 5000))))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

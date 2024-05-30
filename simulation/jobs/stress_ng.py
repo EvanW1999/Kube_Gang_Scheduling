@@ -11,7 +11,8 @@ OP_NAME: str = os.getenv(EnvVarName.OP_NAME.value, "TestOp")
 WORKLOAD_MODIFIER: int = int(os.getenv(EnvVarName.WORKLOAD_MODIFIER.value, 10))
 NUM_INSTANCES: int = int(os.getenv(EnvVarName.NUM_INSTANCES.value, 0))
 ZOOKEEPER_CLIENT_ENDPOINT: str = os.getenv(
-    EnvVarName.ZOOKEEPER_CLIENT_ENDPOINT.value, "zookeeper:2181")
+    EnvVarName.ZOOKEEPER_CLIENT_ENDPOINT.value, "zookeeper:2181"
+)
 BARRIER_PATH: str = os.getenv(EnvVarName.BARRIER_PATH.value, "/barrier")
 
 
@@ -30,8 +31,7 @@ def main() -> None:
         print(f"{JOB_NAME} has connected to Zookeeper")
 
     zk_queue: LockingQueue = LockingQueue(zk, f"/{JOB_NAME}")
-    zk_barrier: DoubleBarrier = DoubleBarrier(
-        zk, BARRIER_PATH, NUM_TASKS + 1)
+    zk_barrier: DoubleBarrier = DoubleBarrier(zk, BARRIER_PATH, NUM_TASKS + 1)
 
     while True:
         print("Job is ready")
@@ -40,9 +40,17 @@ def main() -> None:
         zk_barrier.enter()
         print(f"Starting with workload: {workload}")
         subprocess.check_output(
-            [STRESS_NG_COMMAND, "--metrics", f"--{JOB_NAME}", str(NUM_INSTANCES), OP_NAME, str(WORKLOAD_MODIFIER * workload)])
+            [
+                STRESS_NG_COMMAND,
+                "--metrics",
+                f"--{JOB_NAME}",
+                str(NUM_INSTANCES),
+                OP_NAME,
+                str(WORKLOAD_MODIFIER * workload),
+            ]
+        )
         zk_barrier.leave()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

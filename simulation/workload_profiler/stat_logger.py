@@ -2,7 +2,7 @@ import csv
 from typing import TextIO, List, Union
 
 
-class StatLogger():
+class StatLogger:
     def __init__(self, file_path: str):
         self.csv_file: TextIO = open(file_path, "w+")
         self.csv_writer = csv.writer(self.csv_file)
